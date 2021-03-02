@@ -20,7 +20,7 @@ export class ImageTransform extends LitElement {
         return html`
             <main>
                 <my-resizer>
-                    <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png">
+                    <img draggable="false" src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png">
                 </my-resizer>
             </main>
         `;
