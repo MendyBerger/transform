@@ -23,9 +23,9 @@ export class MyResizer extends LitElement {
         :host {
             display: block;
             position: relative;
-            --node-size: 18px;
+            --node-size: 28px;
             padding: var(--node-size);
-
+            touch-action: none;
         }
         .slot-wrapper {
             display: flex;
@@ -38,6 +38,7 @@ export class MyResizer extends LitElement {
             width: var(--node-size);
             background-color: blue;
             position: absolute;
+            z-index: 1; /* needed for android for only for some corners */
         }
         .top {
             top: 0;
@@ -215,19 +216,24 @@ export class MyResizer extends LitElement {
     private addDraggingListeners(fn: (e: PointerEvent) => void) {
         const removeListener = (e: PointerEvent) => {
             console.log("caneled by", e.type);
-            this.unlockPage();
 
             document.removeEventListener("pointermove", fn);
             document.removeEventListener("pointerup", removeListener);
             document.removeEventListener("pointerleave", removeListener);
             document.removeEventListener("pointercancel", removeListener);
+            // setTimeout(() => {
+                this.unlockPage();
+            // }, 200);
         }
 
         this.lockPage();
         document.addEventListener("pointermove", fn);
         document.addEventListener("pointerup", removeListener);
-        document.addEventListener("pointerleave", removeListener);
-        document.addEventListener("pointercancel", removeListener);
+        // setTimeout(() => {
+            document.addEventListener("pointercancel", e => e.preventDefault());
+            document.addEventListener("pointerleave", e => e.preventDefault());
+        // }, 500);
+        this.lockPage();
     }
 
     render() {
